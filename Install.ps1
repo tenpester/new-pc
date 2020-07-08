@@ -13,14 +13,14 @@ Write-Host ""
 Write-Host "Add 'This PC' Desktop Icon..." -ForegroundColor Green
 Write-Host "------------------------------------" -ForegroundColor Green
 $thisPCIconRegPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"
-$thisPCRegValname = "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" 
-$item = Get-ItemProperty -Path $thisPCIconRegPath -Name $thisPCRegValname -ErrorAction SilentlyContinue 
-if ($item) { 
-    Set-ItemProperty  -Path $thisPCIconRegPath -name $thisPCRegValname -Value 0  
-} 
-else { 
-    New-ItemProperty -Path $thisPCIconRegPath -Name $thisPCRegValname -Value 0 -PropertyType DWORD | Out-Null  
-} 
+$thisPCRegValname = "{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
+$item = Get-ItemProperty -Path $thisPCIconRegPath -Name $thisPCRegValname -ErrorAction SilentlyContinue
+if ($item) {
+    Set-ItemProperty  -Path $thisPCIconRegPath -name $thisPCRegValname -Value 0
+}
+else {
+    New-ItemProperty -Path $thisPCIconRegPath -Name $thisPCRegValname -Value 0 -PropertyType DWORD | Out-Null
+}
 # -----------------------------------------------------------------------------
 Write-Host ""
 Write-Host "Removing Edge Desktop Icon..." -ForegroundColor Green
@@ -61,8 +61,8 @@ if (Check-Command -cmdname 'choco') {
     Write-Host "Choco is already installed, skip installation."
 }
 else {
-    Write-Host ""
-    Write-Host "Installing Chocolate for Windows..." -ForegroundColor Green
+    Write-Host "------------------------------------"
+    Write-Host "Installing Chocolately..." -ForegroundColor Green
     Write-Host "------------------------------------" -ForegroundColor Green
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
@@ -71,54 +71,53 @@ Write-Host ""
 Write-Host "Installing Applications..." -ForegroundColor Green
 Write-Host "------------------------------------" -ForegroundColor Green
 
-if (Check-Command -cmdname 'git') {
-    Write-Host "Git is already installed, checking new version..."
-    choco update git -y
-}
-else {
-    Write-Host ""
-    Write-Host "Installing Git for Windows..." -ForegroundColor Green
-    choco install git -y
+#TODO: check choco packages are already installed, loop through and update if so, install if not
+
+$Packages = @(
+    "malwarebytes",
+    "ccleaner",
+    "gimp",
+    "curl",
+    "putty.install",
+    "winscp.install",
+    "python3",
+    "treesizefree",
+    "7zip.install",
+    "google-chrome",
+    "vlc",
+    "dotnetcire-sdk",
+    "ffmpeg",
+    "k-litecodecpackfull",
+    "wget",
+    "openssl.light",
+    "vscode",
+    "sysinternals",
+    "notepadplusplus.install",
+    "atom",
+    "filezilla",
+    "github-desktop",
+    "awscli",
+    "wireshark",
+    "google-backup-and-sync",
+    "nmap",
+    "virtualbox",
+    "virtualbox-guest-additions-guest.install",
+    "sumatrapdf",
+    "steam")
+
+ForEach ($PackageName in $Packages)
+{
+    Write-Host "Installing $PackageName"
+    choco install $PackageName -y
 }
 
-if (Check-Command -cmdname 'node') {
-    Write-Host "Node.js is already installed, checking new version..."
-    choco update nodejs -y
-}
-else {
-    Write-Host ""
-    Write-Host "Installing Node.js..." -ForegroundColor Green
-    choco install nodejs -y
-}
+Write-Host "Installing windows extras"
 
-choco install malwarebytes -y
-choco install ccleaner -y
-choco install gimp -y
-choco install curl -y
-choco install putty.install -y
-choco install winscp.install -y
-choco install python3 -y
-choco install treesizefree -y
-choco install 7zip.install -y
-choco install microsoft-edge -y
-choco install googlechrome -y
-choco install vlc -y
-choco install dotnetcore-sdk -y
-choco install ffmpeg -y
-choco install k-litecodecpackfull -y
-choco install wget -y
-choco install openssl.light -y
-choco install vscode -y
-choco install sysinternals -y
-choco install notepadplusplus.install -y
-choco install atom -y
-choco install filezilla -y
-choco install microsoft-teams.install -y
-choco install github-desktop -y
-choco install awscli -y
-choco install wireshark -y
-choco install google-backup-and-sync -y
-choco install nmap -y
+Write-Host "Installing telnet client"
+choco install TelnetClient -y -s windowsfeatures
+
+Write-Host "Installing subsystem for linux"
+choco install Microsoft-Windows-Subsystem-Linux -y -s windowsfeatures
 
 Write-Host "------------------------------------" -ForegroundColor Green
 Read-Host -Prompt "Setup is done, restart is needed, press [ENTER] to restart computer."
