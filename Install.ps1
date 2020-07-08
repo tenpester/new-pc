@@ -67,7 +67,7 @@ else {
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
 
-Write-Host ""
+Write-Host "------------------------------------" -ForegroundColor Green
 Write-Host "Installing Applications..." -ForegroundColor Green
 Write-Host "------------------------------------" -ForegroundColor Green
 
@@ -107,16 +107,18 @@ $Packages = @(
 
 ForEach ($PackageName in $Packages)
 {
-    Write-Host "Installing $PackageName"
+    Write-Host "Installing $PackageName" -ForegroundColor Green
     choco install $PackageName -y
 }
 
-Write-Host "Installing windows extras"
+Write-Host "------------------------------------" -ForegroundColor Green
+Write-Host "Installing windows extras" -ForegroundColor Green
+Write-Host "------------------------------------" -ForegroundColor Green
 
-Write-Host "Installing telnet client"
+Write-Host "Installing telnet client" -ForegroundColor Green
 choco install TelnetClient -y -s windowsfeatures
 
-Write-Host "Installing subsystem for linux"
+Write-Host "Installing subsystem for linux" -ForegroundColor Green
 choco install Microsoft-Windows-Subsystem-Linux -y -s windowsfeatures
 
 Write-Host "------------------------------------" -ForegroundColor Green
